@@ -1,0 +1,1 @@
+{"version":"0.0.1","tags":{"streamtags":[],"dataType":["logs"],"useCase":["routing"]},"exports":[],"displayName":"Google Gemini Rest Collector IO","minLogStreamVersion":"4.14.0","description":"Collector pack to process data from Google Gemimi.","author":"Cribl Packs Team","name":"cribl-google-gemini-rest-io"}
