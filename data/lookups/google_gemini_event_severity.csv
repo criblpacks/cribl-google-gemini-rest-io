@@ -1,0 +1,10 @@
+severity,description,event_action
+ALERT,(700) A person must take an action immediately.,keep
+CRITICAL,(600) Critical events cause more severe problems or outages.,keep
+DEBUG,(100) Debug or trace information.,keep
+DEFAULT,(0) The log entry has no assigned severity level.,keep
+EMERGENCY,(800) One or more systems are unusable.,keep
+ERROR,(500) Error events are likely to cause problems.,keep
+INFO,(200) Routine information such as ongoing status or performance.,keep
+NOTICE,(300) Normal but significant events such as start up,keep
+WARNING,(400) Warning events might cause problems.,keep

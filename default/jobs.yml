@@ -1,0 +1,129 @@
+in_google_gemini:
+  type: collection
+  ttl: 4h
+  ignoreGroupJobsLimit: false
+  removeFields: []
+  resumeOnBoot: false
+  schedule:
+    cronSchedule: "*/5 * * * *"
+    maxConcurrentRuns: 1
+    skippable: true
+    run:
+      rescheduleDroppedTasks: true
+      maxTaskReschedule: 1
+      logLevel: info
+      jobTimeout: 60m
+      mode: run
+      timeRangeType: relative
+      timeWarning: {}
+      expression: "true"
+      minTaskSize: 1MB
+      maxTaskSize: 10MB
+      stateTracking:
+        stateUpdateExpression: "__timestampExtracted !== false && {latestTime:
+          (state.latestTime || 0) > _time ? state.latestTime : _time}"
+        stateMergeExpression: "(prevState.latestTime || 0) > newState.latestTime ?
+          prevState : newState"
+        enabled: true
+        stateName: google_gemini_state
+    enabled: false
+  streamtags:
+    - google
+  workerAffinity: false
+  collector:
+    conf:
+      discovery:
+        discoverType: none
+      collectMethod: post_with_body
+      pagination:
+        type: response_body
+        maxPages: 50
+        attribute:
+          - nextPageToken
+        lastPageExpr: "!nextPageToken"
+      authentication: google_oauth
+      timeout: 0
+      useRoundRobinDns: false
+      disableTimeFilter: true
+      decodeUrl: false
+      rejectUnauthorized: true
+      captureHeaders: false
+      stopOnEmptyResults: false
+      safeHeaders: []
+      retryRules:
+        type: backoff
+        interval: 1000
+        limit: 5
+        multiplier: 2
+        maxIntervalMs: 20000
+        codes:
+          - 429
+          - 503
+        enableHeader: true
+        retryConnectTimeout: false
+        retryConnectReset: false
+        retryHeaderName: retry-after
+      __scheduling:
+        stateTracking: {}
+      scopes:
+        - https://www.googleapis.com/auth/cloud-platform
+      collectUrl: "'https://logging.googleapis.com/v2/entries:list'"
+      collectRequestParams: []
+      subject: CHANGEME
+      serviceAccountCredentials: changeme
+      collectBody: >-
+        {
+          "resourceNames": [
+            (C.vars['ORG_ID'] && C.vars['ORG_ID'].trim().length > 0)
+              ? "organizations/" + C.vars['ORG_ID'].trim()
+              : "projects/" + (C.vars['PROJECT_ID'] || "").trim()
+          ],
+          "pageSize": 100,
+          "orderBy": "timestamp asc",
+          "pageToken": (__e && __e.nextPageToken) ? __e.nextPageToken : null,
+          "filter":
+            'protoPayload.@type="type.googleapis.com/google.cloud.audit.AuditLog"'
+            + ' AND protoPayload.serviceName=("geminicloudassist.googleapis.com"'
+            + ' OR "cloudaicompanion.googleapis.com"'
+            + ' OR "geminicodeassist.googleapis.com"'
+            + ' OR "gemini.googleapis.com"'
+            + ' OR "generativelanguage.googleapis.com")'
+            + ' AND timestamp>"'
+            + (new Date(
+                Math.min(
+                  ((new Date()).getTime() - 1000),
+                  Math.max(
+                    ((new Date()).getTime() - (Number(C.vars['LOOKBACK_DAYS'] || 7) * 24 * 60 * 60 * 1000)),
+                    (
+                      (typeof state.latestTime === 'number')
+                        ? ((state.latestTime < 1e12 ? state.latestTime * 1000 : state.latestTime) + 1)
+                        : ((new Date()).getTime() - (Number(C.vars['LOOKBACK_DAYS'] || 7) * 24 * 60 * 60 * 1000))
+                    )
+                  )
+                )
+              )).toISOString()
+            + '" AND timestamp<"'
+            + (new Date()).toISOString()
+            + '"'
+        }
+      collectRequestHeaders:
+        - name: Content-Type
+          value: changeme
+    destructive: false
+    encoding: utf8
+    type: rest
+  input:
+    type: collection
+    staleChannelFlushMs: 10000
+    sendToRoutes: true
+    preprocess:
+      disabled: false
+    throttleRatePerSec: "0"
+    breakerRulesets:
+      - Google Gemini API Ruleset
+    metadata:
+      - name: __packsource
+        value: "'cribl-google-gemini-rest-io'"
+  savedState: {}
+  notifications: []
+  description: This Collector pulls Google Gemini events from GCP

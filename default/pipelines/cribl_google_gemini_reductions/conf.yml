@@ -1,0 +1,62 @@
+output: default
+streamtags: []
+groups:
+  OgDHqy:
+    name: 1. Drop, Sample, Suppress
+    description: Drop, sample or suppress events based on the severity set in
+      google_gemini_event_severity.csv lookup. To modify please click Knowledge
+      > Lookups > google_gemini_event_severity.csv inside the pack.
+    index: 3
+    disabled: false
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: This conditioning pipeline is for use on the Google Workspace Events
+        API endpoint. This pipeline will provide optional reduction functions
+        available.
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: For additional details, see this pack's README under Settings.
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: "Author: Cribl Packs Team"
+  - id: drop
+    filter: __event_action == 'drop'
+    disabled: false
+    conf: {}
+    groupId: OgDHqy
+    description: Drop events based on event severity specified in
+      google_gemini_event_severity.csv
+  - id: sampling
+    filter: __event_action == 'sample'
+    disabled: false
+    conf:
+      rules:
+        - filter: "true"
+          rate: 10
+    groupId: OgDHqy
+    description: Sample events based on event severity specified in
+      google_gemini_event_severity.csv. Default value is 1:10 ratio, but can be
+      configured otherwise.
+  - id: suppress
+    filter: __event_action == 'suppress'
+    disabled: false
+    conf:
+      allow: 1
+      suppressPeriodSec: 30
+      dropEventsMode: true
+      maxCacheSize: 50000
+      cacheIdleTimeoutPeriods: 2
+      numEventsIdleTimeoutTrigger: 10000
+      keyExpr: "`${action}:${object_type}`"
+    groupId: OgDHqy
+    description: Suppress events based on event severity specified in
+      google_gemini_event_severity.csv
+description: Pipeline for applying reductions to Google Gemini events.

@@ -1,0 +1,23 @@
+Google Gemini API Ruleset:
+  minRawLength: 256
+  rules:
+    - condition: "true"
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -420weeks
+      timestampLatest: +1week
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: google_gemini_events
+      jsonTimeField: timestamp
+  tags: google
+  description: Event breaker for Google Gemini Events
+  lib: custom
