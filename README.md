@@ -8,8 +8,6 @@
 
 * ***Note:*** This Pack does not collect events from Google Gemini for Workspace. For that, you will require the [Cribl Google Workspace Pack](https://packs.cribl.io/packs/cribl-google-workspace-rest-io) and enable the `Gemini AI usage in Workspace apps` input. 
 
-* It queries `logging.googleapis.com/v2/entries:list` and filters on `protoPayload.serviceName` to capture Gemini activity. 
-
 ### Supported sources (by serviceName filter)
 
 * [Gemini for Google Cloud](https://docs.cloud.google.com/gemini/docs/audit-logging) (AI Companion) — primary source today. Covers Gemini usage across Cloud Console/Workspace routed through AI Companion.
@@ -32,13 +30,11 @@
 
 ### Configure the Collectors
 
-* The Collector is currently configured at the project level, but you can also expand to an organization-level log sink by adding a variable called *ORG_ID* in the Pack → Knowledge → Variables page and setting the value to your Organization ID. 
+* The Collector is currently configured at the project level, but you can also expand to an organization-level log sink by *adding* a variable called *ORG_ID* in the Pack → Knowledge → Variables page and setting the value to your Organization ID. 
 
 * When ORG_ID is defined, the Collector automatically overrides the PROJECT_ID scope and collects audit logs from all projects within the organization.
 
-* ***Tip***: Organization-level collection requires that your service account has Logging Viewer access at the organization level. If the service account only has project-level permissions, it will not return any data when using ORG_ID.
-
-* After installing the Pack, you must perform the following:
+* ***NOTE***: Organization-level collection requires that your service account has Logging Viewer access at the organization level. If the service account only has project-level permissions, it will not return any data when using ORG_ID.
 
 ### Configure Authentication
 
@@ -81,7 +77,7 @@ The Pack has the following variables:
 * `google_gemini_splunk_default_index`: Default index for the Splunk output - defaults to `gemini`.
 * `google_gemini_splunk_default_sourcetype`: Default sourcetype for the Splunk output – defaults to `google:gcp:gemini`
 * `PROJECT_ID`: Set this to your Project ID.
-* `LOOKBACK_DAYS`: This is how far back, in days, the Collector will look for data when first initialized.  – defaults to `7 days`
+* `LOOKBACK_DAYS`: This is how far back, in days, the Collector will look for data when first initialized – defaults to `7 days`
 
 ## Upgrades
 

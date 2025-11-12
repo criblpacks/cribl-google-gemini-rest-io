@@ -69,8 +69,8 @@ in_google_gemini:
         - https://www.googleapis.com/auth/cloud-platform
       collectUrl: "'https://logging.googleapis.com/v2/entries:list'"
       collectRequestParams: []
-      subject: CHANGEME
-      serviceAccountCredentials: changeme
+      subject: YOUR_IMPERSONATED_EMAIL
+      serviceAccountCredentials: YOUR_ACCOUNT_CREDENTIALS
       collectBody: >-
         {
           "resourceNames": [
@@ -108,7 +108,7 @@ in_google_gemini:
         }
       collectRequestHeaders:
         - name: Content-Type
-          value: changeme
+          value: "'application/json'"
     destructive: false
     encoding: utf8
     type: rest
