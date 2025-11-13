@@ -1,0 +1,32 @@
+id: default
+groups: {}
+comments:
+  - id: Ztx5OT
+    comment: Matches JSON events coming from Google Gemini Collectors
+    index: 0
+  - id: EkqgfV
+    comment: Something went wrong. We shouldn't be here
+    index: 2
+routes:
+  - id: FsGAZJ
+    name: cribl_google-gemini_events_all
+    final: true
+    disabled: false
+    pipeline: cribl_google_gemini
+    description: Process Google Gemini Logs
+    enableOutputExpression: false
+    outputExpression: null
+    filter: __packsource.includes('cribl-google-gemini-rest-io')
+    clones: []
+    output: default
+  - id: default
+    name: default
+    final: true
+    disabled: false
+    pipeline: main
+    description: ""
+    enableOutputExpression: false
+    outputExpression: null
+    filter: "true"
+    clones: []
+    output: default

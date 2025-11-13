@@ -1,0 +1,24 @@
+PROJECT_ID:
+  type: any
+  value: "'CHANGEME'"
+  tags: google,gemini
+  description: "REQUIRED: The project associated with Google Gemini usage"
+  lib: custom
+default_splunk_index:
+  type: any
+  lib: custom
+  value: "'gemini'"
+  description: "This is the default Splunk index the data will be sent to. Please
+    update it accordingly to your preferred index name. "
+  tags: google,gemini
+default_splunk_sourcetype:
+  type: any
+  lib: custom
+  value: "'google:gcp:gemini'"
+  description: This is the default Splunk sourcetype.
+  tags: google,gemini
+LOOKBACK_DAYS:
+  type: number
+  lib: custom
+  value: "7"
+  tags: google,gemini

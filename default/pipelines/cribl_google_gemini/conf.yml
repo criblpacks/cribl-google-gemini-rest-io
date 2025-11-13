@@ -1,0 +1,147 @@
+output: default
+streamtags: []
+groups:
+  SbRroP:
+    name: Initial Parsing and Timestamping
+    description: Parses the JSON object so that we can start working with the
+      fields, sets _time to the correct value
+    index: 3
+  SDNEgH:
+    name: (Optional) Reduction Pipeline
+    description: Pass the events through the reduction pipelines to handle event reductions.
+    index: 4
+    disabled: true
+  KsiiV5:
+    name: Outputs
+    description: Select the output required, if nothing enabled standard JSON will be sent
+    index: 5
+    disabled: true
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        This conditioning pipeline is for use on the Google Gemini Rest Events
+        API endpoint. The Pack will normalize the JSON data from the collector
+        and provide optional reduction techniques. 
+
+
+        There are two current available output formats for the data: 
+            1. Standard JSON that is formatted and timestamp normalized. 
+            3. Splunk; The index value can be modified within the pipeline, however the default value is set in Knowledge > Variables. The sourcetype is set on each collector. Note: changing the sourcetype can affect how the data is handled by Splunk.
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: For additional details, see this pack's README under Settings.
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: "Author: Cribl Packs Team"
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: extract
+      type: json
+      srcField: _raw
+      fieldFilterExpr: value !== '' && value !== null
+      remove: []
+      keep: []
+    description: Parse the JSON from _raw
+    groupId: SbRroP
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      remove:
+        - _raw
+    description: Remove intermediate fields
+    groupId: SbRroP
+  - id: lookup
+    filter: "true"
+    disabled: false
+    conf:
+      dbLookup: false
+      matchMode: exact
+      reloadPeriodSec: -1
+      inFields:
+        - eventField: severity
+          lookupField: severity
+      addToEvent: false
+      ignoreCase: false
+      outFields:
+        - lookupField: event_action
+          eventField: __event_action
+          defaultValue: keep
+      file: google_gemini_event_severity.csv
+    groupId: SbRroP
+    description: Appends the __event_action to the event
+  - id: auto_timestamp
+    filter: "true"
+    disabled: null
+    conf:
+      srcField: timestamp
+      dstField: _time
+      defaultTimezone: UTC
+      timeExpression: time.getTime() / 1000
+      offset: 0
+      maxLen: 150
+      defaultTime: now
+      latestDateAllowed: +1week
+      earliestDateAllowed: -420weeks
+    groupId: SbRroP
+  - id: chain
+    filter: "true"
+    disabled: true
+    conf:
+      processor: cribl_google_gemini_reductions
+    description: (Optional) Pass the events through the reduction pipelines to
+      handle event reductions.
+    groupId: SDNEgH
+  - id: comment
+    filter: "true"
+    disabled: true
+    conf:
+      comment: Output to Splunk
+    groupId: KsiiV5
+  - id: serialize
+    filter: "true"
+    disabled: true
+    conf:
+      type: json
+      dstField: _raw
+      fields:
+        - "!_*"
+        - "!cribl*"
+        - "!source"
+        - "!host"
+        - "*"
+    groupId: KsiiV5
+    description: Serialize JSON to _raw
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - disabled: false
+          value: "index ? index : C.vars['default_splunk_index']"
+          name: index
+        - disabled: false
+          value: "sourcetype ? sourcetype : C.vars['default_splunk_sourcetype']"
+          name: sourcetype
+      keep:
+        - _*
+        - cribl*
+        - source
+        - host
+        - index
+        - sourcetype
+      remove:
+        - "*"
+    groupId: KsiiV5
+    description: Sets the index and sourcetype for Splunk output
+description: Pipeline for parsing, formatting and filtering Google Gemini Rest API events.
