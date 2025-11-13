@@ -31,5 +31,5 @@ outputs:
     dynamicDataset: false
     emptyDirCleanupSec: 300
     type: cribl_lake
-    destPath: ians_sandbox
+    destPath: YOUR_LAKE_DATASET
     compress: gzip
