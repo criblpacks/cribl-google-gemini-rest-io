@@ -1,6 +1,6 @@
 PROJECT_ID:
   type: any
-  value: "'CHANGEME'"
+  value: "'YOUR_PROJECT_ID'"
   tags: google,gemini
   description: "REQUIRED: The project associated with Google Gemini usage"
   lib: custom
