@@ -1,10 +1,10 @@
 {
-  "name": "cribl-gemini-rest",
+  "name": "cribl-gemini-rest-io",
   "version": "1.0.0",
   "minLogStreamVersion": "4.14.0",
   "author": "Cribl Packs Team",
   "description": "Pack to process Google Gemini data",
-  "displayName": "cribl-gemini-rest-io",
+  "displayName": "Google Gemini Rest Collector IO",
   "tags": {
     "streamtags": [],
     "dataType": [
