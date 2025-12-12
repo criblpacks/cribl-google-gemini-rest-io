@@ -2,9 +2,9 @@
 ----
 ## About this Pack
 
-* This Pack is built as a complete SOURCE + DESTINATION solution (identified by the IO suffix). Data collection and delivery happen entirely within the Pack's context, eliminating the need to connect it to globally defined Sources and Destinations. 
+This Pack is built as a complete SOURCE + DESTINATION solution (identified by the IO suffix). Data collection and delivery happen entirely within the Pack's context, eliminating the need to connect it to globally defined Sources and Destinations. 
 
-* This Pack does ***NOT*** connect directly to Gemini model APIs. Instead, it uses the Cloud Logging API (logging.googleapis.com/v2/entries:list) to retrieve Gemini audit events based on the protoPayload.serviceName field.
+This Pack does ***NOT*** connect directly to Gemini model APIs. Instead, it uses the Cloud Logging API (logging.googleapis.com/v2/entries:list) to retrieve Gemini audit events based on the protoPayload.serviceName field.
 
 * ***Note:*** This Pack does not collect events from Google Gemini for Workspace. For that, you will require the [Cribl Google Workspace Pack](https://packs.cribl.io/packs/cribl-google-workspace-rest-io) and enable the `Gemini AI usage in Workspace apps` input. 
 
@@ -28,15 +28,15 @@
 * To use a different Destination: You must update the Pack's routes to specify your desired Destination.
 * For immediate functionality without requiring Pack route filter expression modifications, every bundled Source within this Pack adds a hidden field: `__packsource`. This field allows for seamless routing based on the Pack source.
 
-### Configure the Collectors
+### Configure Project or Organization Level Collection
 
-* The Collector is currently configured at the project level, but you can also expand to an organization-level log sink by *adding* a variable called *ORG_ID* in the Pack → Knowledge → Variables page and setting the value to your Organization ID. 
+* The Collector is currently configured at the project level, but you can also expand to an organization-level log sink by *adding* a variable called `ORG_ID` in the Pack → Knowledge → Variables page and setting the value to your Organization ID. 
 
-* When ORG_ID is defined, the Collector automatically overrides the PROJECT_ID scope and collects audit logs from all projects within the organization.
+* When `ORG_ID` is defined, the Collector automatically overrides the `PROJECT_ID` scope and collects audit logs from all projects within the organization.
 
 * ***NOTE***: Organization-level collection requires that your service account has Logging Viewer access at the organization level. If the service account only has project-level permissions, it will not return any data when using ORG_ID.
 
-### Configure Authentication
+### Obtain Authentication Credentials
 
 * Create or select a Google Cloud project to use for Gemini log collection.
 * From within that project:
@@ -46,7 +46,7 @@
 	4.	The collector authenticates using this service account to call the Cloud Logging API (logging.googleapis.com/v2/entries:list).
 	5.	Required OAuth scope: ***https://www.googleapis.com/auth/cloud-platform***
 
-### Update and Enable the Collectors
+### Configure the Collectors
 * Update the **Service account credentials** with the JSON key obtained from the above steps.
 * Update the **Impersonated account's email address** with the email address used to create the Service account. Note: This is NOT the email of the Service account. It needs to have Owner permissions.
 
@@ -85,8 +85,11 @@ Upgrading certain Cribl Packs using the same Pack ID can have unintended consequ
 
 ## Release Notes
 
+### Version 1.0.1
+- Minor fixes
+
 ### Version 1.0.0
-Initial release
+- Initial release
 
 ## Contributing to the Pack
 

@@ -69,7 +69,7 @@ in_google_gemini:
         - https://www.googleapis.com/auth/cloud-platform
       collectUrl: "'https://logging.googleapis.com/v2/entries:list'"
       collectRequestParams: []
-      subject: YOUR_IMPERSONATED_EMAIL
+      subject: YOUR_IMPERSONATED_EMAIL@company.com
       serviceAccountCredentials: YOUR_ACCOUNT_CREDENTIALS
       collectBody: >-
         {
