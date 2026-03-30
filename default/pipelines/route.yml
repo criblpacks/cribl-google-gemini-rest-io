@@ -18,7 +18,8 @@ routes:
     outputExpression: null
     filter: __packsource.includes('cribl-google-gemini-rest-io')
     clones: []
-    output: default
+    targetContext: group
+    output: __group
   - id: default
     name: default
     final: true
@@ -29,4 +30,5 @@ routes:
     outputExpression: null
     filter: "true"
     clones: []
-    output: default
+    targetContext: group
+    output: __group
